@@ -17,7 +17,8 @@
         @on-pullup-loading="loadMore()">
       <div>
         <UploadedItem :video="video" :key="video.id" v-for="video in uploadedVideolist" v-if="tab" />
-        <UploadItem :refresh="getUploadingVideos" :video="video" :key="video.id" v-for="video in uploadingVideolist" v-if="!tab" />
+        <UploadItem :uploadingVideoID="uploadingVideoID" :refresh="refresh" 
+        :video="video" :key="video.id" v-for="video in uploadingVideolist" v-if="!tab" />
         <div v-if="tab && uploadedVideolist.length == 0" style="text-align: center"><br>暂无内容</div>
         <div v-if="!tab && uploadingVideolist.length == 0" style="text-align: center"><br>暂无内容</div>
       </div>
@@ -43,6 +44,8 @@ export default {
     return {
       uid: "",
       tab: true,
+      firstUpload: true,
+      uploadingVideoID: "",
       onFetching: false,
       uploadingVideolist: [],
       uploadedVideolist: [],
@@ -53,12 +56,34 @@ export default {
         upContent: "释放后更新"
       },
       pullupConfig: {
-        upContent: "上拉加载更多",
+        upContent: "",
         downContent: "释放后加载"
       }
     };
   },
+  mounted() {
+    this.getCurrentUID();
+    if (this.$route.query.startUpload == "0") {
+      this.firstUpload = false;
+      this.uploadedHandler();
+    } else {
+      this.firstUpload = true;
+      this.uploadingHandler();
+    }
+  },
   methods: {
+    startUpload() {
+      if (this.firstUpload == true) {
+        this.firstUpload = false;
+        this.uploadingVideoID = this.$route.query.startUpload;
+        this.android.resumeUpload(this.uploadingVideoID);
+      } else {
+        if (this.uploadingVideolist.length > 0) {
+          this.uploadingVideoID = this.uploadingVideolist[0].id;
+          this.android.resumeUpload(this.uploadingVideoID);
+        }
+      }
+    },
     getUploadingVideos() {
       var self = this;
       this.$axios
@@ -74,6 +99,7 @@ export default {
             self.uploadingVideolist,
             response.data
           );
+          self.startUpload();
         })
         .catch(function(error) {
           console.log(error);
@@ -140,10 +166,6 @@ export default {
           this.$refs.theScroller.reset();
         })
     }
-  },
-  mounted() {
-    this.getCurrentUID();
-    this.uploadingHandler();
   }
 };
 </script>

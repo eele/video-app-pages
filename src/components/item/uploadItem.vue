@@ -40,9 +40,9 @@ import "material-design-icons/iconfont/material-icons.css";
 
 export default {
   mounted() {
-    this.intervalID = setInterval(this.update, 1000);
+    this.uploadProgress();
   },
-  props: ["video", "refresh"],
+  props: ["video", "refresh", "uploadingVideoID"],
   components: {
     CellBox,
     Flexbox,
@@ -55,44 +55,46 @@ export default {
   data() {
     return {
       background: {},
-      uploading: true,
+      uploading: false,
       percent: 0,
       progressUpdated: true,
       intervalID: ""
     };
   },
   methods: {
-    update() {
-      var self = this;
-      if (this.progressUpdated) {
-        this.progressUpdated = false;
-        this.$axios
-          .get(
-            this.uploadServerURL + "/service/videos/" + this.video.id + "/uploadprogress"
-          )
-          .then(function(response) {
-            self.progressUpdated = true;
-            if (response.data.progress != -1) {
-              self.percent = response.data.progress;
-            } else {
-              self.percent = 100;
-              self.android.promptUploadSuccess();
-              clearInterval(self.intervalID);
-            }
-          })
-          .catch(function(error) {
-            self.progressUpdated = true;
-            console.log(error);
-          });
+    uploadProgress() {
+      var p = this.android.getUploadProgress();
+      console.log(p);
+      
+      if (p > this.percent) {
+        this.percent = p;
+      }
+      if (this.percent == 100) {
+        this.percent = 100;
+        this.android.promptUploadSuccess();
+        clearInterval(this.intervalID);
+        this.$parent.refresh();
       }
     },
     pause() {
+      if (
+        this.uploadingVideoID == this.video.id ||
+        this.uploadingVideoID == ""
+      ) {
+        clearInterval(this.intervalID);
+        this.android.pauseUpload();
+      }
       this.uploading = false;
-      this.android.pauseUpload();
     },
     resume() {
+      if (
+        this.uploadingVideoID == this.video.id ||
+        this.uploadingVideoID == ""
+      ) {
+        this.intervalID = setInterval(this.uploadProgress, 1000);
+        this.android.resumeUpload(this.video.id);
+      }
       this.uploading = true;
-      this.android.resumeUpload(this.video.id);
     },
     changeStyle(op) {
       if (op == 0) {

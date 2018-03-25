@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Discover from './pages/discover.vue'
+import Comment from './pages/comment.vue'
 import MyVideo from './pages/myvideo.vue'
 import Mine from './pages/mine.vue'
 
@@ -13,6 +14,10 @@ export const router = new Router({
     {
       path: '/discover',
       component: Discover
+    },
+    {
+      path: '/comment',
+      component: Comment
     },
     {
       path: '/myvideo',

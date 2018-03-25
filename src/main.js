@@ -14,6 +14,7 @@ Axios.defaults.timeout = 5000;
 Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 Axios.defaults.baseURL = 'http://192.168.0.149:8080/video/service/r';
 Vue.prototype.uploadServerURL = 'http://192.168.0.149:8088'
+Vue.prototype.playServerURL = 'http://192.168.0.149'
 Vue.prototype.$axios = Axios
 
 Vue.prototype.android = window.android
