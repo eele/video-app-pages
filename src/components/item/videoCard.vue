@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       videotitle: {},
-      imgUrl: this.playServerURL + "/450x300"
+      imgUrl: "/static/450x300"
     };
   },
   mounted() {
