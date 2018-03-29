@@ -1,6 +1,5 @@
 <template>
-  <scroller lock-x :pulldown-config="pulldownConfig" :pullup-config="pullupConfig" ref="theScroller" 
-  :use-pulldown=true :use-pullup=true @on-pulldown-loading="refresh()" @on-pullup-loading="loadMore()">
+  <scroller lock-x :pulldown-config="pulldownConfig" :pullup-config="pullupConfig" ref="theScroller" :use-pulldown=true :use-pullup=true @on-pulldown-loading="refresh()" @on-pullup-loading="loadMore()">
     <group>
       <cell-box v-for="user in userList" :key="user.id" is-link>
         <div style="margin-right: 1rem">
@@ -14,11 +13,11 @@
           <div style="color:#ababab">{{ user.description }}</div>
         </div>
         <div>
-          <x-button style="width:70px;height:40px" :gradients="['#1D62F0', '#19D5FD']" v-if="true" @click.native="android.setCollect($route.query.vid)">
-            <span style="font-size:14px">+ 订阅</span>
+          <x-button mini plain type="primary" v-if="true" @click.native="android.setCollect($route.query.vid)">
+            <span style="font-size:13px">+ 订阅</span>
           </x-button>
-          <x-button style="width:90px;height:40px" :gradients="['#1D62F0', '#19D5FD']" v-if="false" @click.native="android.setUnCollect(favoriteID)">
-            <span style="font-size:14px">取消订阅</span>
+          <x-button mini v-if="false" @click.native="android.setUnCollect(favoriteID)">
+            <span style="font-size:13px">取消订阅</span>
           </x-button>
         </div>
       </cell-box>
@@ -39,7 +38,7 @@ export default {
     CellBox
   },
   mounted() {
-    if (this.$route.query.r == 'all') {
+    if (this.$route.query.r == "all") {
       this.getUsers("all");
     } else {
       this.getUsers(this.android.getCurrentUID());
@@ -65,7 +64,7 @@ export default {
       this.$axios
         .get("/users", {
           params: {
-            mine: mine,
+            mineId: mine,
             pstart: this.userList.length,
             psize: this.psize
           }
@@ -79,14 +78,22 @@ export default {
     },
     refresh() {
       this.userList = [];
-      this.getUsers();
+      if (this.$route.query.r == "all") {
+        this.getUsers("all");
+      } else {
+        this.getUsers(this.android.getCurrentUID());
+      }
       this.$nextTick(() => {
         this.$refs.theScroller.donePulldown();
         this.$refs.theScroller.reset({ top: 0 });
       });
     },
     loadMore() {
-      this.getUsers();
+      if (this.$route.query.r == "all") {
+        this.getUsers("all");
+      } else {
+        this.getUsers(this.android.getCurrentUID());
+      }
       this.$nextTick(() => {
         this.$refs.theScroller.donePullup();
         this.$refs.theScroller.reset();

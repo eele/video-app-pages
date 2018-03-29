@@ -7,17 +7,18 @@
                 <swipeout-button v-if="mode == 'f'" @click.native="cancelItem(video.id)" type="warn">取消收藏</swipeout-button>
             </div>
             <div slot="content" class="demo-content vux-1px-t">
-                <cell-box :style="background">
+                <cell-box :style="background" @click.native="android.play(video.uid, video.id)" @touchstart.native="changeStyle(1)" @touchend.native="changeStyle(0)">
                     <flexbox :gutter="0">
-                        <flexbox-item :span="1/3" @touchstart.native="changeStyle(1)" @touchend.native="changeStyle(0)">
+                        <flexbox-item :span="1/3">
                             <div class="flex-demo">
                                 <div style='width:6.0rem;height:4.5rem;background-color:grey'>
-                                    
+
                                 </div>
                             </div>
                         </flexbox-item>
-                        <flexbox-item :span="2/3" @touchstart.native="changeStyle(1)" @touchend.native="changeStyle(0)">
+                        <flexbox-item :span="2/3">
                             <div class="v-title">{{video.title}}</div>
+                            <div class="v-desc">{{video.description}}</div>
                             <div class="v-datetime">{{this.getDate(video.datetime)}}</div>
                         </flexbox-item>
                     </flexbox>
@@ -34,7 +35,7 @@ import { Swipeout, SwipeoutItem, SwipeoutButton } from "vux";
 import "material-design-icons/iconfont/material-icons.css";
 
 export default {
-  props: ['video'],
+  props: ["mode", "video"],
   components: {
     CellBox,
     Flexbox,
@@ -68,8 +69,18 @@ export default {
 
 <style>
 .v-title {
+  color: rgb(63, 172, 236);
   font-weight: 900;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.v-desc {
+  font-size: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .v-datetime {
   margin-top: 0.8rem;

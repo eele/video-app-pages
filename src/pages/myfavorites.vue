@@ -7,7 +7,7 @@
         @on-pulldown-loading="refresh()" 
         @on-pullup-loading="loadMore()">
       <div>
-        <UploadedItem :mode="f" :video="video" :key="video.id" v-for="video in videolist" />
+        <UploadedItem mode="f" :video="video" :key="video.id" v-for="video in videolist" />
         <div v-if="videolist.length == 0" style="text-align: center"><br>暂无内容</div>
       </div>
     </scroller>
