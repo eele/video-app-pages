@@ -2,7 +2,9 @@
     <swipeout>
         <swipeout-item transition-mode="follow">
             <div slot="right-menu">
-                <swipeout-button @click.native="deleteItem(video.id)" type="warn">删除</swipeout-button>
+                <swipeout-button v-if="mode == 'u'" @click.native="deleteItem(video.id)" type="warn">删除</swipeout-button>
+                <swipeout-button v-if="mode == 'h'" @click.native="deleteHistoryItem(video.id)" type="warn">删除</swipeout-button>
+                <swipeout-button v-if="mode == 'f'" @click.native="cancelItem(video.id)" type="warn">取消收藏</swipeout-button>
             </div>
             <div slot="content" class="demo-content vux-1px-t">
                 <cell-box :style="background">
@@ -57,7 +59,9 @@ export default {
         };
       }
     },
-    deleteItem(id) {}
+    deleteItem(id) {},
+    deleteHistoryItem(id) {},
+    cancelItem(id) {}
   }
 };
 </script>

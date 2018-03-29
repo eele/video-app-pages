@@ -16,7 +16,7 @@
         @on-pulldown-loading="refresh()" 
         @on-pullup-loading="loadMore()">
       <div>
-        <UploadedItem :video="video" :key="video.id" v-for="video in uploadedVideolist" v-if="tab" />
+        <UploadedItem :mode="u" :video="video" :key="video.id" v-for="video in uploadedVideolist" v-if="tab" />
         <UploadItem :uploadingVideoID="uploadingVideoID" :refresh="refresh" 
         :video="video" :key="video.id" v-for="video in uploadingVideolist" v-if="!tab" />
         <div v-if="tab && uploadedVideolist.length == 0" style="text-align: center"><br>暂无内容</div>

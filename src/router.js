@@ -4,6 +4,7 @@ import Discover from './pages/discover.vue'
 import Comment from './pages/comment.vue'
 import MyVideo from './pages/myvideo.vue'
 import Subscribe from './pages/subscribe.vue'
+import MyFavorites from './pages/myfavorites.vue'
 import Mine from './pages/mine.vue'
 
 Vue.use(Router)
@@ -27,6 +28,10 @@ export const router = new Router({
     {
       path: '/subscribe',
       component: Subscribe
+    },
+    {
+      path: '/myfavorites',
+      component: MyFavorites
     },
     {
       path: '/mine',

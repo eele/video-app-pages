@@ -1,5 +1,6 @@
 <template>
-  <scroller lock-x :pulldown-config="pulldownConfig" :pullup-config="pullupConfig" ref="theScroller" :use-pulldown=true :use-pullup=true @on-pulldown-loading="refresh()" @on-pullup-loading="loadMore()">
+  <scroller lock-x :pulldown-config="pulldownConfig" :pullup-config="pullupConfig" ref="theScroller" 
+  :use-pulldown=true :use-pullup=true @on-pulldown-loading="refresh()" @on-pullup-loading="loadMore()">
     <group>
       <cell-box v-for="user in userList" :key="user.id" is-link>
         <div style="margin-right: 1rem">
@@ -21,7 +22,7 @@
           </x-button>
         </div>
       </cell-box>
-      <div v-if="userList.length == 0" style="text-align: center"><br>暂无自频道</div>
+      <div v-if="userList.length == 0" style="text-align: center"><br>暂无内容</div>
     </group>
   </scroller>
 </template>
@@ -38,7 +39,11 @@ export default {
     CellBox
   },
   mounted() {
-    this.getUsers();
+    if (this.$route.query.r == 'all') {
+      this.getUsers("all");
+    } else {
+      this.getUsers(this.android.getCurrentUID());
+    }
   },
   data() {
     return {
@@ -55,11 +60,12 @@ export default {
     };
   },
   methods: {
-    getUsers() {
+    getUsers(mine) {
       var self = this;
       this.$axios
         .get("/users", {
           params: {
+            mine: mine,
             pstart: this.userList.length,
             psize: this.psize
           }
