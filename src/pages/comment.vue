@@ -9,8 +9,8 @@
                     <span style="font-size:14px">{{ videoInfo.description }}</span>
                 </div>
                 <div style="height:100%">
-                    <x-button style="width:60px;height:40px" :gradients="['#1D62F0', '#19D5FD']" v-if="favoriteID == ''" @click.native="android.setCollect($route.query.vid)">
-                        <span style="font-size:14px">收藏</span>
+                    <x-button style="width:80px;height:40px" :gradients="['#1D62F0', '#19D5FD']" v-if="favoriteID == ''" @click.native="android.setCollect($route.query.vid)">
+                        <span style="font-size:14px">+ 收藏</span>
                     </x-button>
                     <x-button style="width:90px;height:40px" :gradients="['#1D62F0', '#19D5FD']" v-if="favoriteID != ''" @click.native="android.setUnCollect(favoriteID)">
                         <span style="font-size:14px">取消收藏</span>

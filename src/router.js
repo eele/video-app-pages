@@ -2,16 +2,17 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Discover from './pages/discover.vue'
 import Comment from './pages/comment.vue'
-import MyVideo from './pages/myvideo.vue'
+import UserVideos from './pages/uservideos.vue'
+import MyVideos from './pages/myvideos.vue'
 import Subscribe from './pages/subscribe.vue'
 import MyFavorites from './pages/myfavorites.vue'
+import MyHistory from './pages/myhistory.vue'
 import Mine from './pages/mine.vue'
 
 Vue.use(Router)
 
 export const router = new Router({
   mode: 'history',
-  base: __dirname,
   routes: [
     {
       path: '/discover',
@@ -22,8 +23,12 @@ export const router = new Router({
       component: Comment
     },
     {
-      path: '/myvideo',
-      component: MyVideo
+      path: '/uservideos',
+      component: UserVideos
+    },
+    {
+      path: '/myvideos',
+      component: MyVideos
     },
     {
       path: '/subscribe',
@@ -32,6 +37,10 @@ export const router = new Router({
     {
       path: '/myfavorites',
       component: MyFavorites
+    },
+    {
+      path: '/myhistory',
+      component: MyHistory
     },
     {
       path: '/mine',

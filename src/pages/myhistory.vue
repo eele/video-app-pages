@@ -1,13 +1,8 @@
 <template>
   <div>
-    <scroller lock-x height="-45"
-        :pulldown-config="pulldownConfig" 
-        :pullup-config="pullupConfig" ref="theScroller" 
-        :use-pulldown=true :use-pullup=true 
-        @on-pulldown-loading="refresh()" 
-        @on-pullup-loading="loadMore()">
+    <scroller lock-x height="-45" :pulldown-config="pulldownConfig" :pullup-config="pullupConfig" ref="theScroller" :use-pulldown=true :use-pullup=true @on-pulldown-loading="refresh()" @on-pullup-loading="loadMore()">
       <div>
-        <UploadedItem :mode="h" :history="true" :video="video" :key="video.id" v-for="video in videolist" />
+        <UploadedItem mode="h" :history="true" :video="video" :key="video.id" v-for="video in videolist" />
         <div v-if="videolist.length == 0" style="text-align: center"><br>暂无内容</div>
       </div>
     </scroller>
@@ -42,21 +37,20 @@ export default {
   },
   methods: {
     getPlayHistory() {
+      var vidList = JSON.parse(this.android.getHistoryVid(this.videolist.length, this.psize));
+      console.log(vidList);
+      
       var self = this;
-      this.$axios
-        .get("/history", {
-          params: {
-            uid: this.android.getCurrentUID(),
-            pstart: this.videolist.length,
-            psize: this.psize
-          }
-        })
-        .then(function(response) {
-          self.videolist.push.apply(self.videolist, response.data);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      for (var i in vidList) {
+        this.$axios
+          .get("/videos/" + vidList[i])
+          .then(function(response) {
+            self.videolist.push(response.data);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     },
     refresh() {
       this.videolist = [];
