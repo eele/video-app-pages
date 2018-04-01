@@ -11,7 +11,8 @@
               <div class="flex-demo">
                 <div style='width:4.5rem;height:4.5rem;'>
                   <x-circle :percent="percent" :stroke-width="5" stroke-color="#3FC7FA">
-                    <span style="color:#3FC7FA">{{percent}}%</span>
+                    <span style="color:#3FC7FA" v-if="this.uploadingVideoID == this.video.id || !uploading">{{percent}}%</span>
+                    <span style="color:#3FC7FA" v-if="this.uploadingVideoID != this.video.id && uploading">等待中</span>
                   </x-circle>
                 </div>
               </div>
@@ -40,9 +41,15 @@ import "material-design-icons/iconfont/material-icons.css";
 
 export default {
   mounted() {
-    this.uploadProgress();
+    this.percent = this.android.getSavedUploadProgress(this.video.id);
+    if (this.uploadingVideoID == this.video.id) {
+      this.intervalID = setInterval(this.getUploadProgress, 1000);
+      
+      this.android.resumeUpload(this.video.id);
+      this.uploading = true;
+    }
   },
-  props: ["video", "refresh", "uploadingVideoID"],
+  props: ["video", "uploadingVideoID"],
   components: {
     CellBox,
     Flexbox,
@@ -62,10 +69,9 @@ export default {
     };
   },
   methods: {
-    uploadProgress() {
+    getUploadProgress() {
       var p = this.android.getUploadProgress();
-      console.log(p);
-      
+
       if (p > this.percent) {
         this.percent = p;
       }
@@ -73,26 +79,24 @@ export default {
         this.percent = 100;
         this.android.promptUploadSuccess();
         clearInterval(this.intervalID);
-        this.$parent.refresh();
+        this.android.removeSavedUploadProgress(this.video.id);
+        this.$emit("changeUploadingVideoID", "0");
+        this.$emit("refresh");
       }
     },
     pause() {
-      if (
-        this.uploadingVideoID == this.video.id ||
-        this.uploadingVideoID == ""
-      ) {
+      if (this.uploadingVideoID == this.video.id) {
         clearInterval(this.intervalID);
-        this.android.pauseUpload();
+        this.android.pauseUpload(this.video.id, this.percent);
+        this.$emit("changeUploadingVideoID", "0");
       }
       this.uploading = false;
     },
     resume() {
-      if (
-        this.uploadingVideoID == this.video.id ||
-        this.uploadingVideoID == ""
-      ) {
-        this.intervalID = setInterval(this.uploadProgress, 1000);
+      if (this.uploadingVideoID == "0") {
+        this.intervalID = setInterval(this.getUploadProgress, 1000);
         this.android.resumeUpload(this.video.id);
+        this.$emit("changeUploadingVideoID", this.video.id);
       }
       this.uploading = true;
     },

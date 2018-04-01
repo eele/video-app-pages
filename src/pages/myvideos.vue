@@ -16,8 +16,8 @@
         @on-pulldown-loading="refresh()" 
         @on-pullup-loading="loadMore()">
       <div>
-        <UploadedItem :mode="u" :video="video" :key="video.id" v-for="video in uploadedVideolist" v-if="tab" />
-        <UploadItem :uploadingVideoID="uploadingVideoID" :refresh="refresh" 
+        <UploadedItem mode="u" :video="video" :key="video.id" v-for="video in uploadedVideolist" v-if="tab" />
+        <UploadItem :uploadingVideoID="uploadingVideoID" v-on:changeUploadingVideoID="changeUploadingVideoID" v-on:refresh="refresh"
         :video="video" :key="video.id" v-for="video in uploadingVideolist" v-if="!tab" />
         <div v-if="tab && uploadedVideolist.length == 0" style="text-align: center"><br>暂无内容</div>
         <div v-if="!tab && uploadingVideolist.length == 0" style="text-align: center"><br>暂无内容</div>
@@ -45,7 +45,7 @@ export default {
       uid: "",
       tab: true,
       firstUpload: true,
-      uploadingVideoID: "",
+      uploadingVideoID: this.$route.query.uploadingVideoID,
       onFetching: false,
       uploadingVideolist: [],
       uploadedVideolist: [],
@@ -61,12 +61,9 @@ export default {
       }
     };
   },
-  created() {
-      window.refresh = this.refresh;
-  },
   mounted() {
     this.getCurrentUID();
-    if (this.$route.query.startUpload == "0") {
+    if (this.uploadingVideoID == "0") {
       this.firstUpload = false;
       this.uploadedHandler();
     } else {
@@ -75,22 +72,13 @@ export default {
     }
   },
   methods: {
-    startUpload() {
-      if (this.firstUpload == true) {
-        this.firstUpload = false;
-        this.uploadingVideoID = this.$route.query.startUpload;
-        this.android.resumeUpload(this.uploadingVideoID);
-      } else {
-        if (this.uploadingVideolist.length > 0) {
-          this.uploadingVideoID = this.uploadingVideolist[0].id;
-          this.android.resumeUpload(this.uploadingVideoID);
-        }
-      }
+    changeUploadingVideoID(id) {
+      this.uploadingVideoID = id;
     },
     getUploadingVideos() {
       var self = this;
       this.$axios
-        .get("/videos/uploading", {
+        .get("/videos/p/uploading", {
           params: {
             uid: this.uid,
             pstart: this.uploadingVideolist.length,
@@ -102,7 +90,6 @@ export default {
             self.uploadingVideolist,
             response.data
           );
-          self.startUpload();
         })
         .catch(function(error) {
           console.log(error);
@@ -111,7 +98,7 @@ export default {
     getUploadedVideos() {
       var self = this;
       this.$axios
-        .get("/videos/uploaded", {
+        .get("/videos/p/uploaded", {
           params: {
             uid: this.uid,
             pstart: this.uploadedVideolist.length,
