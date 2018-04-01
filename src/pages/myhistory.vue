@@ -32,13 +32,15 @@ export default {
       }
     };
   },
+  created() {
+      window.refresh = this.refresh;
+  },
   mounted() {
     this.getPlayHistory();
   },
   methods: {
     getPlayHistory() {
       var vidList = JSON.parse(this.android.getHistoryVid(this.videolist.length, this.psize));
-      console.log(vidList);
       
       var self = this;
       for (var i in vidList) {

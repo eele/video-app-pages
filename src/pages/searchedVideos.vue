@@ -7,8 +7,8 @@
         @on-pulldown-loading="refresh()" 
         @on-pullup-loading="loadMore()">
       <div>
-        <UploadedItem mode="f" :video="video" :key="video.id" v-for="video in videolist" />
-        <div v-if="videolist.length == 0" style="text-align: center"><br>暂无内容</div>
+        <UploadedItem mode="search" :video="video" :key="video.id" v-for="video in videolist" />
+        <div v-if="videolist.length == 0" style="text-align: center"><br>暂无搜索结果</div>
       </div>
     </scroller>
   </div>
@@ -37,19 +37,16 @@ export default {
       }
     };
   },
-  created() {
-      window.refresh = this.refresh;
-  },
   mounted() {
-    this.getFavoriteVideos();
+    this.searchVideos();
   },
   methods: {
-    getFavoriteVideos() {
+    searchVideos() {
       var self = this;
       this.$axios
-        .get("/favorites/videos", {
+        .get("/videos/all/found", {
           params: {
-            uid: this.android.getCurrentUID(),
+            title: this.$route.query.title,
             pstart: this.videolist.length,
             psize: this.psize
           }
@@ -63,14 +60,14 @@ export default {
     },
     refresh() {
       this.videolist = [];
-      this.getFavoriteVideos();
+      this.searchVideos();
       this.$nextTick(() => {
         this.$refs.theScroller.donePulldown();
         this.$refs.theScroller.reset({ top: 0 });
       });
     },
     loadMore() {
-      this.getFavoriteVideos();
+      this.searchVideos();
       this.$nextTick(() => {
         this.$refs.theScroller.donePullup();
         this.$refs.theScroller.reset();

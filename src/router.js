@@ -8,6 +8,8 @@ import Subscribe from './pages/subscribe.vue'
 import MyFavorites from './pages/myfavorites.vue'
 import MyHistory from './pages/myhistory.vue'
 import Mine from './pages/mine.vue'
+import SearchedVideos from './pages/searchedVideos.vue'
+import SearchedUsers from './pages/searchedUsers.vue'
 
 Vue.use(Router)
 
@@ -45,6 +47,14 @@ export const router = new Router({
     {
       path: '/mine',
       component: Mine
+    },
+    {
+      path: '/searchedVideos',
+      component: SearchedVideos
+    },
+    {
+      path: '/searchedUsers',
+      component: SearchedUsers
     }
   ]
 })

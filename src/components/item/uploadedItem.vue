@@ -2,9 +2,9 @@
     <swipeout>
         <swipeout-item transition-mode="follow">
             <div slot="right-menu">
-                <swipeout-button v-if="mode == 'u'" @click.native="deleteItem(video.id)" type="warn">删除</swipeout-button>
+                <swipeout-button v-if="mode == 'u'" @click.native="deleteVideoItem(video.id)" type="warn">删除</swipeout-button>
                 <swipeout-button v-if="mode == 'h'" @click.native="deleteHistoryItem(video.id)" type="warn">删除</swipeout-button>
-                <swipeout-button v-if="mode == 'f'" @click.native="cancelItem(video.id)" type="warn">取消收藏</swipeout-button>
+                <swipeout-button v-if="mode == 'f'" @click.native="cancelFavoriteItem(video.id)" type="warn">取消收藏</swipeout-button>
             </div>
             <div slot="content" class="demo-content vux-1px-t">
                 <cell-box :style="background" @click.native="android.play(video.uid, video.id)" @touchstart.native="changeStyle(1)" @touchend.native="changeStyle(0)">
@@ -60,9 +60,15 @@ export default {
         };
       }
     },
-    deleteItem(id) {},
-    deleteHistoryItem(id) {},
-    cancelItem(id) {}
+    deleteVideoItem(id) {
+        this.android.deleteVideoItem(id);
+    },
+    deleteHistoryItem(id) {
+        this.android.deleteHistoryItem(id);
+    },
+    cancelFavoriteItem(id) {
+        this.android.cancelFavoriteItem(id);
+    }
   }
 };
 </script>

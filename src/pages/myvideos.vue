@@ -61,6 +61,9 @@ export default {
       }
     };
   },
+  created() {
+      window.refresh = this.refresh;
+  },
   mounted() {
     this.getCurrentUID();
     if (this.$route.query.startUpload == "0") {

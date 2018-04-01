@@ -30,11 +30,7 @@ export default {
     CellBox
   },
   mounted() {
-    if (this.$route.query.r == "all") {
-      this.getUsers("all");
-    } else {
-      this.getUsers(this.android.getCurrentUID());
-    }
+    this.searchUsers();
   },
   data() {
     return {
@@ -51,12 +47,12 @@ export default {
     };
   },
   methods: {
-    getUsers(mine) {
+    searchUsers() {
       var self = this;
       this.$axios
-        .get("/users", {
+        .get("/users/all/found", {
           params: {
-            mineId: mine,
+            username: this.$route.query.username,
             pstart: this.userList.length,
             psize: this.psize
           }
@@ -70,22 +66,14 @@ export default {
     },
     refresh() {
       this.userList = [];
-      if (this.$route.query.r == "all") {
-        this.getUsers("all");
-      } else {
-        this.getUsers(this.android.getCurrentUID());
-      }
+      this.searchUsers();
       this.$nextTick(() => {
         this.$refs.theScroller.donePulldown();
         this.$refs.theScroller.reset({ top: 0 });
       });
     },
     loadMore() {
-      if (this.$route.query.r == "all") {
-        this.getUsers("all");
-      } else {
-        this.getUsers(this.android.getCurrentUID());
-      }
+      this.searchUsers();
       this.$nextTick(() => {
         this.$refs.theScroller.donePullup();
         this.$refs.theScroller.reset();
