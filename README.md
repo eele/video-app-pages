@@ -1,4 +1,4 @@
-# www
+# video-app-pages
 
 > Some web pages for video app
 

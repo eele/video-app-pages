@@ -44,8 +44,7 @@ export default {
     this.percent = this.android.getSavedUploadProgress(this.video.id);
     if (this.uploadingVideoID == this.video.id) {
       this.intervalID = setInterval(this.getUploadProgress, 1000);
-      
-      this.android.resumeUpload(this.video.id);
+      // this.android.resumeUpload(this.video.id);
       this.uploading = true;
     }
   },
@@ -79,7 +78,7 @@ export default {
         this.percent = 100;
         this.android.promptUploadSuccess();
         clearInterval(this.intervalID);
-        this.android.removeSavedUploadProgress(this.video.id);
+        this.android.finishUpload(this.video.id);
         this.$emit("changeUploadingVideoID", "0");
         this.$emit("refresh");
       }
@@ -110,7 +109,9 @@ export default {
         };
       }
     },
-    deleteItem(id) {}
+    deleteItem(id) {
+      this.android.deleteVideoItem(id);
+    }
   }
 };
 </script>
