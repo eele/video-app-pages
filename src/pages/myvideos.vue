@@ -79,24 +79,7 @@ export default {
       this.uploadingVideoID = id;
     },
     getUploadingVideos() {
-      var self = this;
-      this.$axios
-        .get("/videos/p/uploading", {
-          params: {
-            uid: this.uid,
-            pstart: this.uploadingVideolist.length,
-            psize: this.uploadingPsize
-          }
-        })
-        .then(function(response) {
-          self.uploadingVideolist.push.apply(
-            self.uploadingVideolist,
-            response.data
-          );
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      this.uploadingVideolist = JSON.parse(this.android.getUploadingVideos());
     },
     getUploadedVideos() {
       var self = this;
@@ -151,8 +134,6 @@ export default {
     loadMore() {
       if (this.tab) {
         this.getUploadedVideos();
-      } else {
-        this.getUploadingVideos();
       }
       this.$nextTick(() => {
           this.$refs.theScroller.donePullup();
