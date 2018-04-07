@@ -20,7 +20,6 @@ Vue.prototype.playServerURL = 'http://192.168.0.149';
 Vue.prototype.$axios = Axios;
 
 Vue.prototype.android = window.android;
-console.log(Axios.defaults.headers);
 
 // 时间戳转日期+时间格式
 Vue.prototype.getTime = function (timestamp) {

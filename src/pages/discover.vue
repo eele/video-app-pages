@@ -9,12 +9,12 @@
             <div>
                 <x-table full-bordered style="background-color:#fff;">
                     <tbody>
-                        <tr v-if="videoList.length > 0">
+                        <tr v-if="videoTop != null">
                             <td colspan="2">
                                 <VideoCard :video="videoTop" :top=true />
                             </td>
                         </tr>
-                        <tr v-for="videos in videoList" :key="videos[0].id" v-if="videoList.length > 1">
+                        <tr v-for="videos in videoList" :key="videos[0].id" v-if="videoList.length > 0">
                             <td>
                                 <VideoCard :video="videos[0]" :top=false />
                             </td>
@@ -52,7 +52,7 @@ export default {
       tabActive: 1,
       categories: [],
       currentCid: "",
-      videoTop: {},
+      videoTop: null,
       videoList: [],
       pstart: 0,
       psize: 11,
@@ -70,7 +70,7 @@ export default {
     getCategories() {
       var self = this;
       this.$axios
-        .get("/categories")
+        .get("/categories?name=")
         .then(function(response) {
           self.categories = response.data;
           self.currentCid = self.categories[0].id;
@@ -96,7 +96,10 @@ export default {
           if (response.data.length > 0 && self.videoList.length == 0) {
             self.videoTop = response.data[0];
           }
-          let index = 0;
+          if (response.data.length == 0 && self.videoList.length == 0) {
+            self.videoTop = null;
+          }
+          var index = 0;
           if (self.videoList.length == 0) {
             index = 1;
           }
@@ -104,7 +107,7 @@ export default {
             index = 1;
             self.videoList[self.videoList.length - 1][1] = response.data[0];
           }
-          for (let i = index; i < response.data.length; i += 2) {
+          for (var i = index; i < response.data.length; i += 2) {
             if (i + 1 == response.data.length) {
               self.videoList.push([response.data[i]]);
             } else {
