@@ -30,7 +30,7 @@ export default {
           this.video.uid +
           "/" +
           this.video.id +
-          "_/img"
+          "_/img.jpg"
       )
       .then(function(response) {
         self.imgUrl =
@@ -39,7 +39,7 @@ export default {
           self.video.uid +
           "/" +
           self.video.id +
-          "_/img";
+          "_/img.jpg";
       });
 
     if (this.top) {

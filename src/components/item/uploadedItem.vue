@@ -12,7 +12,7 @@
             <flexbox-item :span="1/3">
               <div class="flex-demo">
                 <div style='width:6.0rem;height:4.5rem;background-color:grey'>
-
+                  <img :src="this.playServerURL + '/' + video.uid + '/' + video.id + '_/img.jpg'" style='width:6.0rem;height:4.5rem' />
                 </div>
               </div>
             </flexbox-item>
