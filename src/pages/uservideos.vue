@@ -44,7 +44,7 @@ export default {
     getUserVideos() {
       var self = this;
       this.$axios
-        .get("/videos/uploaded", {
+        .get("/videos/p/uploaded", {
           params: {
             uid: this.$route.query.uid,
             pstart: this.videolist.length,

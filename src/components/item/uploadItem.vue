@@ -12,7 +12,7 @@
                 <div style='width:4.5rem;height:4.5rem;'>
                   <x-circle :percent="percent" :stroke-width="5" stroke-color="#3FC7FA">
                     <span style="color:#3FC7FA" v-if="this.uploadingVideoID == this.video.vid || !uploading">{{percent}}%</span>
-                    <span style="color:#3FC7FA" v-if="this.uploadingVideoID != this.video.vid && uploading">等待中</span>
+                    <span style="color:#3FC7FA" v-if="this.uploadingVideoID != this.video.vid && uploading">请稍候</span>
                   </x-circle>
                 </div>
               </div>
